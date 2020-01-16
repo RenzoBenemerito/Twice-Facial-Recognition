@@ -1,3 +1,8 @@
+"""
+Script for training an SVM on our generated embeddings and labels
+
+"""
+# Import the required packages
 import cv2
 import pickle
 import dlib
@@ -6,6 +11,7 @@ import argparse
 from sklearn import svm
 import os
 
+# Initialize arguments parser
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
@@ -29,6 +35,7 @@ args = parser.parse_args()
 def train_svm():
     file_name = args.input
     model_name = args.output
+    # load the encodings and the labels from our embeddings pickle file
     try:
         data = pickle.loads(open(file_name, "rb").read())
         encodings = data["encodings"]

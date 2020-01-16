@@ -1,5 +1,5 @@
 """
-Main application for running face recognition for the attendance system
+Facial Recognition Encode Script
 
 """
 
@@ -14,8 +14,8 @@ import pickle
 import os
 import argparse
 
+# Initialize arguments parser
 parser = argparse.ArgumentParser()
-
 parser.add_argument(
     '--filename',
     '-f',
@@ -23,6 +23,9 @@ parser.add_argument(
     help="Path to embeddings pickle file.",
     default="data.pickle")
 args = parser.parse_args()
+
+# Load the encodings if they already exist and load the embeddings and labels to lists
+# Create a black pickle file for writing if not
 print("[INFO] loading encodings...")
 try:
     data = pickle.loads(open(args.filename, "rb").read())
@@ -41,7 +44,9 @@ print("[INFO] loading facial landmark predictor...")
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('shapepredictor/shape_predictor_68_face_landmarks.dat')
 
-
+# Function for creating embedings for our images
+# append the embeddings and labels to our respective lists
+# write the embeddings and labels to a pickle file
 def encode(crop, name):
     global data
     data_to_encode = {}
@@ -58,6 +63,8 @@ def encode(crop, name):
     except Exception as e:
         return e
 
+# Function for face detection
+# This calls our encode function on each detected face to generate embeddings
 def detect():
     x=y=h=w=0
     for dirs in os.walk("data/", topdown=True):

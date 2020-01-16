@@ -1,7 +1,3 @@
-# USAGE
-# python recognize_faces_video_file.py --encodings encodings.pickle --input videos/lunch_scene.mp4
-# python recognize_faces_video_file.py --encodings encodings.pickle --input videos/lunch_scene.mp4 --output output/lunch_scene_output.avi --display 0
-
 # import the necessary packages
 import face_recognition
 import argparse
@@ -38,6 +34,7 @@ writer = None
 with open(args["model"], 'rb') as infile:
     (model, names) = pickle.load(infile)
 
+# Function for predicting a face cropped by our HOG face detector
 def svm(model, crop):
     name = "Unknown"
     try:
@@ -50,11 +47,14 @@ def svm(model, crop):
     except Exception as e:
         print("[INFO] There was an error", e)
     return (name, id_proba)
-# loop over frames from the video file stream
 
+
+# Generate unique colors for each label
 colors = []
 palette = sns.color_palette("hls", len(model.classes_)+1)
 palette = np.array(palette) * 255
+
+# loop over frames from the video file stream
 while True:
 	# grab the next frame
 	(grabbed, frame) = stream.read()
