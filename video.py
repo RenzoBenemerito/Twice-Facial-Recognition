@@ -31,6 +31,8 @@ args = vars(ap.parse_args())
 # initialize the pointer to the video file and the video writer
 print("[INFO] processing video...")
 stream = cv2.VideoCapture(args["input"])
+fps = stream.get(cv2.CAP_PROP_FPS)
+print("[INFO] processing at {} fps".format(fps))
 writer = None
 
 with open(args["model"], 'rb') as infile:
@@ -102,7 +104,7 @@ while True:
 	# the output video to disk initialize the writer
 	if writer is None and args["output"] is not None:
 		fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-		writer = cv2.VideoWriter(args["output"], fourcc, 24,
+		writer = cv2.VideoWriter(args["output"], fourcc, fps,
 			(frame.shape[1], frame.shape[0]), True)
 
 	# if the writer is not None, write the frame with recognized
