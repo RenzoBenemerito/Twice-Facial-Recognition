@@ -1,5 +1,8 @@
 """
-Script for training an SVM on our generated embeddings and labels
+train.py
+Authored by: Renzo Benemerito
+
+A script for training an SVM on generated embeddings and labels
 
 """
 # Import the required packages

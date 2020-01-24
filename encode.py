@@ -1,9 +1,15 @@
 """
-Facial Recognition Encode Script
+encode.py
+Authored by: Renzo Benemerito
 
+A script for generating embeddings on face images.
+Images from the data directory are cropped by the hog face detector.
+The cropped images are stored in the data_processed directory for reference
+The cropped images are passed through the CNN to generate embeddings.
+Embeddings are saved to a pickle file.
 """
 
-# import the necessary packages
+# Import the necessary packages
 from scipy.spatial import distance as dist
 from imutils import face_utils
 import numpy as np
@@ -42,7 +48,6 @@ except Exception as e:
 # the facial landmark predictor
 print("[INFO] loading facial landmark predictor...")
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor('shapepredictor/shape_predictor_68_face_landmarks.dat')
 
 # Function for creating embedings for our images
 # append the embeddings and labels to our respective lists
@@ -79,6 +84,8 @@ def detect():
                     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                     rects = detector(gray, 0)
                     colored = frame.copy()
+                    # Convert the channels to RGB format
+                    colored = cv2.cvtColor(colored, cv2.COLOR_BGR2RGB)
                     height, width = colored.shape[:2]
 
                     
@@ -88,7 +95,7 @@ def detect():
                         y = rect.top()-50
                         w = rect.right()+25
                         h = rect.bottom()+25
-                        
+                        # Adjust the bounding box if it is out of frame
                         if y < 0:
                             y = 0
 
@@ -108,9 +115,10 @@ def detect():
                             w = width
                         
                         cv2.rectangle(frame, (x, y), (w,h), (0, 255, 0), 2)
-                        roi_gray = gray[y:h, x:w]
                         roi_colored = colored[y:h, x:w]
                         status = encode(roi_colored, d)
+                        # Convered the channels to BGR format so it can be displayed correctly
+                        roi_colored = cv2.cvtColor(roi_colored, cv2.COLOR_RGB2BGR)
                         cv2.imwrite("data_processed/"+d+"/"+f,roi_colored)
                         print(status)
                     cv2.imshow("Frame", roi_colored)

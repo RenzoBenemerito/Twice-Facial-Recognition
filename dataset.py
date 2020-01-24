@@ -1,7 +1,17 @@
+"""
+dataset.py
+Authored by: Renzo Benemerito
+
+A script for downloading images through the google_images_download package.
+Creates a directory called data where it will store the class directories.
+The class directories will store the images respectively.
+"""
+# Import the necessary packages
 from google_images_download import google_images_download
 import os
 import argparse
 
+# Arguments
 arg = argparse.ArgumentParser()
 arg.add_argument("-k", "--keyword", required=True,
 	help="keyword you want to search")
@@ -12,6 +22,7 @@ arg.add_argument("-o", "--output_dir", default=None,
 
 args = arg.parse_args()
 
+# Create data directory
 if not os.path.exists("data/"):
     os.mkdir("data/")
 

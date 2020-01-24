@@ -1,3 +1,13 @@
+"""
+video.py
+Authored by: Renzo Benemerito
+
+A script inspired by this blog post: https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/
+Takes a video as input
+Processes each frame and generates bounding boxes and labels
+The processed frames are written to an output video
+"""
+
 # import the necessary packages
 import face_recognition
 import argparse
@@ -41,6 +51,7 @@ def svm(model, crop):
         proba = model.predict_proba([crop]).ravel()
         threshold = max(proba)
         id_proba = 9
+		# if the probability is greater than our threshold, accept the prediction
         if threshold > args["threshold"]:
             id_proba = np.argmax(proba)
             name = model.classes_[id_proba]
